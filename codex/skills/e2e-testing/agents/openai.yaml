@@ -1,0 +1,4 @@
+interface:
+  display_name: "E2E Testing"
+  short_description: "Write user-flow Playwright tests"
+  default_prompt: "Use $e2e-testing to add or maintain user-flow Playwright tests for the Respan app."

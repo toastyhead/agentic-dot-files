@@ -1,0 +1,3 @@
+1. Never checkout new branches until the users asks you to do so.
+2. When working in `/Users/rizwan_respan/respan-frontend-codex`, automatically invoke the global `$respan-browser-testing` skill after implementing or fixing user-visible behavior, when investigating regressions or review findings, and before declaring frontend work complete. Exercise every changed flow on `http://localhost:3001` against the staging API and update an associated PR's Test or Testing section with verified results.
+3. Keep these `respan-frontend-codex` instructions local to this global AGENTS.md. Do not copy them into the repository or modify repository ignore files for them.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investigate Review Comments"
+  short_description: "Browser-verify PR review comments"
+  default_prompt: "Use $investigate-review-comments to browser-verify every unresolved PR review comment before assigning a real-issue or false-alert verdict."
