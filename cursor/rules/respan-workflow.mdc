@@ -1,8 +1,13 @@
-# Agent instructions
+---
+description: Respan frontend workflow for both local checkouts
+alwaysApply: true
+---
 
-1. Never checkout new branches until the users asks you to do so.
-2. When planning work, use only the `respan-frontend` and `respan-backend` repositories as the source of context and guidance.
-3. For feature changes, bug fixes, regression investigations, review fixes, and PR validation in `respan-frontend`, automatically invoke the global `$respan-browser-testing` skill after implementation. Exercise every changed user flow on the live local app against the staging API and keep the associated PR's Test or Testing section current with the verified results.
+# Respan workflow
+
+1. Never checkout new branches until the user asks you to do so.
+2. When planning work under `/Users/rizwan_respan/work`, use only the `respan-frontend` and `respan-backend` repositories as the source of context and guidance.
+3. For feature changes, bug fixes, regression investigations, review fixes, and PR validation in `/Users/rizwan_respan/work/respan-frontend` or `/Users/rizwan_respan/respan-frontend-codex`, automatically invoke the global `$respan-browser-testing` skill after implementation. Exercise every changed user flow on the live local app against the staging API and keep the associated PR's Test or Testing section current with the verified results.
 4. During Respan browser testing, reuse suitable existing staging data whenever possible. Do not create an API key or ingest data for UI changes that can be validated without fresh ingestion. If fresh data is genuinely required, create the temporary key through the browser and revoke it after testing; API-key lifecycle changes may create a key when that lifecycle is itself under test.
 5. Reuse `http://localhost:3000` for `/Users/rizwan_respan/work/respan-frontend`. Reuse `http://localhost:3001` for `/Users/rizwan_respan/respan-frontend-codex`. For git worktrees, use an isolated temporary server on another port as directed by the skill.
 6. Never create a new frontend automated test case or file, or materially expand an existing case, unless the user explicitly approves test creation for the current task. A request to implement, fix, refactor, review, validate, browser-test, or address a regression is not test approval. Running and auditing existing tests is allowed.
@@ -12,4 +17,5 @@
 10. Mock only slow, nondeterministic, external, or side-effecting boundaries. A test whose setup and mocks outweigh the behavior under test is a warning to simplify the test or skip it; existing oversized regression suites are not precedents to imitate.
 11. Playwright coverage is reserved for a small number of critical user journeys. The browser verification required by rule 3 is validation evidence and does not imply that a Playwright spec should be created.
 12. For frontend-test audits, PR test reviews, or requests to find brittle, redundant, or unnecessary tests, invoke the local global `$audit-frontend-tests` skill. Treat its static scan as review signals that require code context, not automatic proof that a test should be removed.
-13. Keep these testing-policy changes and the audit skill local only. Do not stage, commit, push, publish, or copy the modified `AGENTS.md` or `CLAUDE.md` files or the skill into a repository unless the user explicitly asks.
+13. Keep these testing-policy changes and the audit skill machine-local. Do not stage, commit, push, publish, or copy the modified `AGENTS.md` or `CLAUDE.md` files or the skill into a Respan repository unless the user explicitly asks.
+14. Chronicle is Codex-only. Do not install or invoke it from Cursor.

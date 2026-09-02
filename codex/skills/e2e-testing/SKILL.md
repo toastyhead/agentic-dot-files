@@ -20,8 +20,8 @@ Maintain a user-focused Playwright suite for the `respan-frontend` app. All e2e 
 - Base URL: `http://localhost:3001` by default. Use `http://localhost:3000` only when the user explicitly says so, via `PLAYWRIGHT_BASE_URL=http://localhost:3000`.
 - The dev server is expected to already be running. The suite does not start it.
 - App routes live under `/platform/<page>`, for example `/platform/home`, `/platform/dashboard`, `/platform/prompts`, and `/platform/datasets`. The login screen is `/login`.
-- Test account credentials: read them from `e2e/.env` as `E2E_EMAIL` and
-  `E2E_PASSWORD`; do not print or copy the plaintext values into durable files.
+- Test account email: `rizwan@respan.ai`.
+- Test account password: read it from `e2e/.env` as `E2E_PASSWORD`; do not print or copy the plaintext password into durable files.
 - Authentication runs once in `tests/auth.setup.ts` and is reused by every spec via `storageState`. Specs must not log in manually.
 
 ## First-time bootstrap

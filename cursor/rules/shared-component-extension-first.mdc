@@ -1,0 +1,48 @@
+---
+description: "Reuse and extend shared components before creating new ones"
+alwaysApply: true
+---
+
+# Shared component extension-first rule
+
+Use existing shared components as the default path. Improve shared APIs before adding new components or feature-specific props.
+
+## Required workflow
+
+1. Search `src/components/` and sibling feature code for an existing component or hook pattern first.
+2. If a component almost fits, extend it with generic capability props or composition slots.
+3. Keep page/business rules in `src/pages/**` or feature hooks, not in shared UI components.
+4. Create a new exportable component only when no shared extension path is viable and reuse is expected across multiple features.
+
+## API boundary guardrails
+
+- Do **not** add feature-coupled props to shared components (for example, `isDashboardMinuteRangeEnabled`, `isLogsPage`, or `isPromptsMode`).
+- Before adding any new shared prop, verify the existing API, variants, and slot/callback patterns are insufficient.
+- Prefer neutral contracts such as `customOptions`, callbacks, render slots, or generic capability flags.
+- If behavior is truly one-off for a single page, keep the wrapper local to that feature folder instead of `src/components/`.
+
+## Codebase examples
+
+```tsx
+// ❌ feature-coupled shared API
+<TimeRangeSelector
+  mode="dashboard"
+  isDashboardMinuteRangeEnabled={isDashboardsDetailRoute}
+/>
+```
+
+```tsx
+// ✅ reusable extension path
+<TimeRangeSelector
+  mode="dashboard"
+  customOptions={dashboardTimeOptions}
+  onCustomRangeSubmit={handleDashboardRangeSubmit}
+/>
+```
+
+```tsx
+// ✅ composition guardrail pattern in shared UI
+<TopBarRightContentWrapper
+  timeRange={<TimeRangeSelector mode="signals" />}
+/>
+```

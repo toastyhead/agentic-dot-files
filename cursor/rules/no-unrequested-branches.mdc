@@ -1,0 +1,10 @@
+---
+description: Do not create git branches unless explicitly requested
+alwaysApply: true
+---
+
+# No unrequested branches
+
+Do not create or switch to a new git branch unless the user explicitly asks for a new branch.
+
+If a task appears to require branch isolation, ask first instead of creating the branch proactively.

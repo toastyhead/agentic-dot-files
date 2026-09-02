@@ -51,8 +51,8 @@ Do not create an API key or ingest data by default. First inspect the changed fl
 2. Create new staging data only when the changed UI cannot be validated with existing data, the behavior under test depends on a fresh or uniquely shaped ingested record, or ingestion itself is part of the changed flow. Do not ingest data only for isolation or habit when a suitable existing record is available.
 3. If no new data is needed, skip API-key creation and report `API key: not created; fresh ingestion not required`.
 4. If the API-key creation or revocation UI is itself the changed behavior, exercise that lifecycle even when no telemetry ingestion is needed.
-5. When fresh ingestion or the API-key lifecycle under test requires a key, read and follow `$browser:control-in-app-browser`, then create the key through `/platform/api-keys?action=create` on the selected local server. Do not reuse an existing key or create it through a direct API call.
-6. Give the key a unique name containing `Codex browser test`, the tested feature, and a UTC timestamp. Confirm the create request uses staging.
+5. When fresh ingestion or the API-key lifecycle under test requires a key, use the Cursor IDE browser tools, then create the key through `/platform/api-keys?action=create` on the selected local server. Do not reuse an existing key or create it through a direct API call.
+6. Give the key a unique name containing `Cursor browser test`, the tested feature, and a UTC timestamp. Confirm the create request uses staging.
 7. Capture the one-time secret only in ephemeral runtime state. Never print it, paste it into a tool command, save it to disk, or place it in source, logs, screenshots, summaries, or PR text.
 8. When the regression matrix needs newly seeded traces, spans, threads, users, custom identifiers, or other records, read [references/staging-test-data.md](references/staging-test-data.md). Use the temporary key and the staging-enforcing wrapper at [scripts/run-staging-otel-traces.mjs](scripts/run-staging-otel-traces.mjs).
 9. Prefer supported environment overrides for counts and success/error coverage. If the required fixture shape is missing, update `/Users/rizwan_respan/work/scripts/send-respan-otel-traces.mjs` and its README as needed, validate the script, send a small targeted batch, and verify the resulting data in the live UI.
@@ -63,7 +63,7 @@ Revoking the key does not remove ingested staging data. Use distinctive fixture 
 
 ## 5. Exercise the live app
 
-1. Read and follow `$browser:control-in-app-browser` before browser work. Use its in-app Browser flow unless the user explicitly chooses another browser.
+1. Use the Cursor IDE browser tools. List tabs with `browser_tabs`, open with `browser_navigate`, lock with `browser_lock` before a sequence, inspect with `browser_snapshot` / `browser_take_screenshot`, interact with `browser_click` / `browser_type` / `browser_fill`, and unlock with `browser_lock` when done. Use the in-app Browser unless the user explicitly chooses another browser.
 2. Open the selected local URL and navigate from a realistic entry point.
 3. Perform the regression matrix using visible, user-level interactions.
 4. Verify outcomes from fresh page state. Do not rely on stale locators, stale cached forms, or a previous checkout's tab.
@@ -102,7 +102,7 @@ Include whether existing data was reused or new fixtures were ingested. Record `
 Example:
 
 ```bash
-python3 /Users/rizwan_respan/.codex/skills/respan-browser-testing/scripts/update_pr_test_section.py \
+python3 /Users/rizwan_respan/.cursor/skills/respan-browser-testing/scripts/update_pr_test_section.py \
   --repo-root /absolute/path/to/checkout \
   --scope "Changed feature flow" \
   --server "http://localhost:3000" \

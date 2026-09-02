@@ -192,6 +192,7 @@ Optional environment variables:
   RESPAN_OTEL_THREAD_COUNT    Defaults to ${DEFAULT_THREAD_COUNT}
   RESPAN_OTEL_ENVIRONMENT     Defaults to ${DEFAULT_ENVIRONMENT}
   RESPAN_OTEL_FORCE_SUCCESS   Defaults to false
+  RESPAN_OTEL_SEED_RUN_ID     Optional unique suffix for seeded entities
 `);
 };
 
@@ -247,27 +248,42 @@ const getBooleanEnvironmentValue = (name, defaultValue) => {
   throw new Error(`${name} must be either true or false.`);
 };
 
+const getOptionalSeedRunId = () => {
+  const seedRunId = process.env.RESPAN_OTEL_SEED_RUN_ID?.trim() || "";
+
+  if (seedRunId && !/^[a-z0-9][a-z0-9-]{0,62}[a-z0-9]$/i.test(seedRunId)) {
+    throw new Error(
+      "RESPAN_OTEL_SEED_RUN_ID must be 2-64 letters, numbers, or hyphens.",
+    );
+  }
+
+  return seedRunId;
+};
+
 const getHexId = (byteLength) => randomBytes(byteLength).toString("hex");
 
-const getProfileForThread = (threadIndex) => {
+const getProfileForThread = (threadIndex, seedRunId) => {
   const baseProfile =
     customIdentifierProfiles[threadIndex % customIdentifierProfiles.length];
   const profileCycleNumber =
     Math.floor(threadIndex / customIdentifierProfiles.length) + 1;
-
-  if (profileCycleNumber === 1) {
-    return baseProfile;
-  }
-
-  const profileSuffix = `seed-${profileCycleNumber}`;
+  const profileCycleSuffix =
+    profileCycleNumber === 1 ? "" : `seed-${profileCycleNumber}`;
+  const identifierSuffix = [profileCycleSuffix, seedRunId]
+    .filter(Boolean)
+    .join("-");
   const [emailLocalPart, emailDomain] = baseProfile.customerEmail.split("@");
 
-  return {
-    ...baseProfile,
-    customIdentifier: `${baseProfile.customIdentifier}-${profileSuffix}`,
-    customerIdentifier: `${baseProfile.customerIdentifier}-${profileSuffix}`,
-    customerEmail: `${emailLocalPart}+${profileSuffix}@${emailDomain}`,
-  };
+  return identifierSuffix
+    ? {
+        ...baseProfile,
+        customIdentifier: `${baseProfile.customIdentifier}-${identifierSuffix}`,
+        customerIdentifier: `${baseProfile.customerIdentifier}-${identifierSuffix}`,
+        customerEmail: `${emailLocalPart}+${identifierSuffix}@${emailDomain}`,
+        threadPrefix: `${baseProfile.threadPrefix}-${identifierSuffix}`,
+        seedRunId,
+      }
+    : { ...baseProfile, seedRunId };
 };
 
 const toUnixNano = (timestampMs) =>
@@ -336,6 +352,9 @@ const createCommonAttributes = ({
     profile.customerIdentifier,
   ),
   createAttribute("respan.metadata.seed_source", "scripts/send-respan-otel-traces.mjs"),
+  ...(profile.seedRunId
+    ? [createAttribute("respan.metadata.seed_run_id", profile.seedRunId)]
+    : []),
   createAttribute("respan.metadata.customer_tier", profile.customerTier),
   createAttribute("respan.metadata.region", profile.region),
   createAttribute("respan.metadata.is_error_sample", isError),
@@ -567,11 +586,12 @@ const main = async () => {
     "RESPAN_OTEL_FORCE_SUCCESS",
     false,
   );
+  const seedRunId = getOptionalSeedRunId();
   const spans = Array.from({ length: traceCount }, (_, traceIndex) => {
     const threadIndex = traceIndex % threadCount;
     const threadTurnIndex = Math.floor(traceIndex / threadCount);
     const profileIndex = threadIndex % customIdentifierProfiles.length;
-    const profile = getProfileForThread(threadIndex);
+    const profile = getProfileForThread(threadIndex, seedRunId);
 
     return createTraceSpans({
       profile,

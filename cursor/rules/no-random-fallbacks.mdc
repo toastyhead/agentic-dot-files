@@ -1,0 +1,16 @@
+---
+description: "Do not add fallbacks unless explicitly requested"
+alwaysApply: true
+---
+
+# No unrequested fallbacks
+
+Do not add random fallback behavior unless the user explicitly requests it in the prompt.
+
+This includes:
+- Default fallback values that hide missing or invalid data
+- Silent fallback logic in `catch` blocks
+- Automatic alternative code paths when the intended path fails
+- Implicit retries or substitutions not asked for in the prompt
+
+When fallback behavior might be useful, ask the user first instead of adding it by default.

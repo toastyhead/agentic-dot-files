@@ -1,7 +1,7 @@
 interface:
   display_name: "Respan browser testing"
   short_description: "Validate live Respan changes with staging data"
-  default_prompt: "Use $respan-browser-testing to create an ephemeral browser-issued API key, seed any relevant staging data, validate every changed flow on the correct live local server, revoke the key, and update the PR Testing section."
+  default_prompt: "Use $respan-browser-testing to validate every changed flow on the correct live local server, reuse suitable existing staging data, create and revoke an ephemeral browser-issued API key only if fresh data ingestion or direct API-key lifecycle validation requires it, and update the PR Testing section."
 
 policy:
   allow_implicit_invocation: true

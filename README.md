@@ -1,64 +1,62 @@
 # Agentic dot files
 
-This repository is a one-time, sanitized backup of Rizwan's local agent
-instructions, custom skills, workspace scripts, and Playwright harness captured
-on August 24, 2026.
+Sanitized backup of Rizwan's local agent instructions, custom skills, workspace
+scripts, and Playwright harness. Cursor is the recommended runtime. Codex is
+kept as a maintained compatibility copy.
 
-It intentionally stores only automation that was not already backed up by the
-Respan repositories. It is not a scheduled sync, and none of the source
-workspaces were turned into Git repositories to create this snapshot.
+This repository is not a scheduled sync. Clone it outside the Respan work
+directory and copy only the payload paths in [SETUP.md](SETUP.md).
 
 ## Contents
 
 | Path | Purpose |
 | --- | --- |
-| `codex/AGENTS.md` | Global Codex rules, including branch and browser-testing behavior. |
-| `codex/skills/` | Custom global Codex skills that are not duplicated in a Respan repository. |
+| `cursor/rules/` | Global Cursor rules, including Respan workflow for both frontend checkouts. |
+| `cursor/skills/` | Cursor-native global skills. |
+| `codex/AGENTS.md` | Global Codex rules, kept in sync with the current local Codex installation. |
+| `codex/skills/` | Codex global skills, including Chronicle which is Codex-only. |
 | `workspace/work/AGENTS.md` | Instructions applied at the shared Respan work root. |
-| `workspace/work/.cursor/skills/` | Workspace-local Cursor skill variants. |
+| `workspace/work/.cursor/skills/` | Workspace-local Cursor E2E skill, kept in sync with the global Cursor version. |
 | `workspace/work/scripts/` | Cross-repository helper scripts. |
 | `workspace/work/e2e/` | Standalone Playwright configuration and user-flow tests. |
 
-See [SETUP.md](SETUP.md) for the source-to-destination map and restore steps.
-
 ## Skills
 
-| Skill | Location | What it does |
-| --- | --- | --- |
-| `change-logs-update` | `codex/skills/change-logs-update` | Builds shipped and work-in-progress changelog updates for the authenticated engineer across the Respan frontend and backend repositories. |
-| `chronicle` | `codex/skills/chronicle` | Uses the local Chronicle screen-history feature when recent on-screen context is needed and its privacy preconditions are satisfied. |
-| `e2e-testing` | `codex/skills/e2e-testing` | Creates and maintains user-flow-oriented Playwright tests in the shared E2E harness. |
-| `investigate-review-comments` | `codex/skills/investigate-review-comments` | Triages GitHub review threads, verifies claims with concrete code and browser evidence, fixes confirmed issues, and prepares requested replies. |
-| `respan-browser-testing` | `codex/skills/respan-browser-testing` | Validates frontend behavior in an authenticated browser against staging, records evidence, and keeps matching PR test notes current. |
-| `e2e-testing` (workspace variant) | `workspace/work/.cursor/skills/e2e-testing` | Preserves the distinct Cursor-oriented version that lived under the shared work directory. |
-
-The global and workspace E2E skills are both retained because their contents
-differ. The global version is the current Codex installation; the workspace
-copy preserves the local Cursor workflow.
+| Skill | Cursor | Codex | What it does |
+| --- | --- | --- | --- |
+| `respan-browser-testing` | yes | yes | Validates frontend behavior in an authenticated browser against staging and keeps matching PR test notes current. |
+| `investigate-review-comments` | yes | yes | Triages GitHub review threads, verifies claims with browser evidence, and prepares replies. |
+| `e2e-testing` | yes | yes | Creates and maintains user-flow Playwright tests in the shared E2E harness. |
+| `audit-frontend-tests` | yes | yes | Audits frontend tests for brittle, redundant, or low-value coverage without modifying them. |
+| `change-logs-update` | yes | yes | Builds shipped and work-in-progress changelog updates for the authenticated engineer. |
+| `commit-and-push` | yes | yes | Stages, commits, and pushes with Conventional Commits. |
+| `create-pr` | yes | yes | Opens a GitHub pull request against upstream `respanai/respan-frontend`. |
+| `convention` | yes | yes | Frontend development conventions. |
+| `chronicle` | no | yes | Codex screen-history skill. Cursor has no equivalent Memories/Chronicle recorder contract, so this stays Codex-only. |
 
 ## Scripts and tests
 
-- `send-respan-otel-traces.mjs` generates deterministic synthetic OpenTelemetry
-  traces for exercising Respan logs pages.
-- The E2E harness contains authentication setup plus smoke, dashboard autosave,
-  Experiment V2 rerun, and public-demo user journeys.
-- The browser-testing skill includes staging trace seeding and a helper for
-  updating a pull request's Test or Testing section.
+- `send-respan-otel-traces.mjs` generates deterministic synthetic OpenTelemetry traces for exercising Respan logs pages.
+- `check-respan-gateway-pii-redaction.mjs` verifies gateway PII redaction against staging.
+- The E2E harness contains authentication setup plus smoke, dashboard autosave, Experiment V2 rerun, public-demo, and playground-handoffs user journeys.
+- The browser-testing skill includes staging trace seeding and a helper for updating a pull request's Test or Testing section.
+
+## Restore destinations
+
+Cursor is the shared source for both:
+
+1. `/Users/rizwan_respan/work`
+2. `/Users/rizwan_respan/respan-frontend-codex`
+
+Restore Cursor files into `$HOME/.cursor`. Restore Codex files into `$HOME/.codex` only if you still use Codex. Workspace files go to `/Users/rizwan_respan/work`.
+
+Do not copy these files into tracked Respan repositories unless you explicitly want them committed there.
 
 ## Deliberate exclusions
 
-- `commit-and-push`, `create-pr`, and `convention` were not copied from the
-  global Codex directory because byte-for-byte identical versions are already
-  tracked by `respan-frontend` under `.cursor/skills/`.
-- `respan-frontend-codex` contributed no local-only files. Its `AGENTS.md`,
-  `CLAUDE.md`, `.claude/`, and `.cursor/` agent files were already tracked, and
-  the checkout was clean when this snapshot was made.
-- Respan repositories, worktrees, nested `.git` directories, dependencies,
-  build output, Playwright reports, test results, screen recordings, sample
-  datasets, and unrelated media are excluded.
-- `.env`, authenticated browser state, API keys, tokens, and plaintext
-  passwords are excluded. A few copied instructions contained a staging
-  password; only the backup copies were sanitized before publication.
+- MCP configuration, hook state, automation credentials, `.env` files, authenticated browser state, API keys, tokens, and plaintext passwords are excluded.
+- Nested `.git` directories, dependencies, build output, Playwright reports, test results, screen recordings, and unrelated media are excluded.
+- Chronicle remains Codex-only and is not installed under `cursor/skills/`.
+- Cursor hooks (`~/.cursor/hooks.json` and `respan_hook.py`) stay machine-local and are not backed up here.
 
-This repository is public. Keep credentials in local ignored files and review
-future additions before committing them.
+This repository is public. Keep credentials in local ignored files and review future additions before committing them.

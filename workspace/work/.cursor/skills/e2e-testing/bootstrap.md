@@ -1,6 +1,6 @@
 # E2E bootstrap (first time only)
 
-Run this once, when `/Users/rizwan_respan/work/e2e` has no `package.json`. Create the files below verbatim, then install and verify. These files already exist if the suite was bootstrapped previously; treat this as the source of truth if any are missing.
+Run this once, when `/Users/rizwan_respan/work/e2e` has no `package.json`. Create the files below, then install and verify. These files already exist if the suite was bootstrapped previously; treat this as the source of truth if any are missing.
 
 ## Files
 
@@ -92,8 +92,8 @@ import { Page } from "@playwright/test";
 
 /**
  * respan-frontend buttons (ButtonNew) expose their variant class as the
- * accessible name (e.g. "button-md-default"), so getByRole('button', { name })
- * will NOT match the visible label. Match on visible text content instead.
+ * accessible name (e.g. "button-md-default"), so getByRole("button", { name })
+ * will not match the visible label. Match on visible text content instead.
  * Mirrors respan-frontend/tests/helpers/locators.ts.
  */
 export const getButtonByText = (page: Page, text: string | RegExp) =>
@@ -139,7 +139,7 @@ setup("authenticate", async ({ page }) => {
 
 ### `e2e/tests/smoke/app-loads.spec.ts`
 
-A foundational smoke test that proves auth + routing work end-to-end. Keep this; it is not a trivial presence check.
+A foundational smoke test that proves auth and routing work end-to-end. Keep this; it is not a trivial presence check.
 
 ```ts
 import { test, expect } from "@playwright/test";
@@ -160,16 +160,18 @@ test.describe("app smoke", () => {
 # PLAYWRIGHT_BASE_URL=http://localhost:3000
 
 # Test account credentials
-E2E_EMAIL=your-email@example.com
+E2E_EMAIL=rizwan@respan.ai
 E2E_PASSWORD=your-password-here
 ```
 
-### `e2e/.env` (gitignored, real credentials)
+### `e2e/.env` (gitignored)
 
 ```bash
-E2E_EMAIL=<local-test-email>
-E2E_PASSWORD=<local-test-password>
+E2E_EMAIL=rizwan@respan.ai
+E2E_PASSWORD=your-password-here
 ```
+
+If `.env` already exists, leave it intact. If `.env` is missing and the password is not available from current local context, ask the user for `E2E_PASSWORD`; do not copy a plaintext password into the skill or chat output.
 
 ### `e2e/.gitignore`
 

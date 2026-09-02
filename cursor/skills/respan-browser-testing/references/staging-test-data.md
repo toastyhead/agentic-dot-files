@@ -33,7 +33,7 @@ Prefer the skill wrapper, which rejects non-staging endpoint/environment overrid
 
 ```bash
 RESPAN_API_KEY=<temporary-staging-key> \
-node /Users/rizwan_respan/.codex/skills/respan-browser-testing/scripts/run-staging-otel-traces.mjs
+node /Users/rizwan_respan/.cursor/skills/respan-browser-testing/scripts/run-staging-otel-traces.mjs
 ```
 
 Inject the secret directly into the child process environment from ephemeral runtime state. Do not render the resolved command or environment. Keep `RESPAN_API_KEY` out of shell history and tool-visible command text.
@@ -45,7 +45,7 @@ const { spawn } = await import("node:child_process");
 const sender = spawn(
   process.execPath,
   [
-    "/Users/rizwan_respan/.codex/skills/respan-browser-testing/scripts/run-staging-otel-traces.mjs",
+    "/Users/rizwan_respan/.cursor/skills/respan-browser-testing/scripts/run-staging-otel-traces.mjs",
     "--api-key-stdin",
   ],
   { stdio: ["pipe", "pipe", "pipe"] },
