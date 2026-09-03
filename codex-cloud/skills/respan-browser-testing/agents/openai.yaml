@@ -1,0 +1,7 @@
+interface:
+  display_name: "Respan browser testing"
+  short_description: "Validate cloud changes against staging"
+  default_prompt: "Use $respan-browser-testing to validate every changed flow from the exact Codex Cloud checkout with headless Playwright and staging data."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,4 @@
+interface:
+  display_name: "E2E Testing"
+  short_description: "Run approved cloud Playwright coverage"
+  default_prompt: "Use $e2e-testing to run or maintain approved Respan Playwright journeys in Codex Cloud."

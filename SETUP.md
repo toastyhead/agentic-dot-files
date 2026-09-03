@@ -22,6 +22,7 @@ Keep Codex files only if you still use Codex.
 | `cursor/skills/<skill>/` | `$HOME/.cursor/skills/<skill>/` |
 | `codex/AGENTS.md` | `$HOME/.codex/AGENTS.md` |
 | `codex/skills/<skill>/` | `$HOME/.codex/skills/<skill>/` |
+| `codex-cloud/` | Codex Cloud environment setup and maintenance scripts; do not copy over the local profile. |
 | `workspace/work/AGENTS.md` | `$HOME/work/AGENTS.md` |
 | `workspace/work/.cursor/skills/e2e-testing/` | `$HOME/work/.cursor/skills/e2e-testing/` |
 | `workspace/work/scripts/` | `$HOME/work/scripts/` |
@@ -57,6 +58,31 @@ cp -R codex/skills/. "$HOME/.codex/skills/"
 
 Restart Codex after changing global instructions or skills so a new session
 loads the restored definitions.
+
+## Configure Codex Cloud
+
+Codex Cloud does not inherit the local `$HOME/.codex` directory. In the cloud
+environment settings, paste [`codex-cloud/setup.sh`](codex-cloud/setup.sh) into
+the setup script and [`codex-cloud/maintenance.sh`](codex-cloud/maintenance.sh)
+into the maintenance script.
+
+The setup clones this repository to `$HOME/agentic-dot-files`, links each remote
+skill into the documented `$HOME/.agents/skills` location, installs the cloud
+`AGENTS.md`, and prepares the existing Playwright harness plus Chromium. The
+maintenance script fast-forwards the cached clone so skill changes apply to
+resumed environments.
+
+For authenticated staging validation, configure `E2E_EMAIL` and `E2E_PASSWORD`
+as cloud environment variables for a dedicated low-privilege staging user.
+Enable agent-phase network access for the staging API and authentication domains
+used by the application. Never store those values in this public repository.
+
+Set `CODEX_CLOUD_SKIP_BROWSER_SETUP=1` when an environment intentionally should
+not install Chromium. After changing setup, instructions, or skills, reset the
+cloud environment cache or start a new run and verify the discovered skills.
+
+See [`codex-cloud/README.md`](codex-cloud/README.md) for capability and
+limitation details.
 
 ## Restore workspace instructions and helpers
 

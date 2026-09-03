@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit Frontend Tests"
+  short_description: "Flag brittle, redundant frontend tests"
+  default_prompt: "Use $audit-frontend-tests to audit changed frontend tests for redundancy, brittleness, and unnecessary coverage without modifying tests."

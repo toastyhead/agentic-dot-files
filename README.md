@@ -1,8 +1,8 @@
 # Agentic dot files
 
-Sanitized backup of Rizwan's local agent instructions, custom skills, workspace
-scripts, and Playwright harness. Cursor is the recommended runtime. Codex is
-kept as a maintained compatibility copy.
+Sanitized backup of Rizwan's local and Codex Cloud agent instructions, custom
+skills, workspace scripts, and Playwright harness. Cursor is the recommended
+local runtime. Codex is kept as a maintained compatibility copy.
 
 This repository is not a scheduled sync. Clone it outside the Respan work
 directory and copy only the payload paths in [SETUP.md](SETUP.md).
@@ -15,6 +15,7 @@ directory and copy only the payload paths in [SETUP.md](SETUP.md).
 | `cursor/skills/` | Cursor-native global skills. |
 | `codex/AGENTS.md` | Global Codex rules, kept in sync with the current local Codex installation. |
 | `codex/skills/` | Codex global skills, including Chronicle which is Codex-only. |
+| `codex-cloud/` | Remote-safe Codex Cloud instructions, skills, helpers, and environment bootstrap scripts. |
 | `workspace/work/AGENTS.md` | Instructions applied at the shared Respan work root. |
 | `workspace/work/.cursor/skills/` | Workspace-local Cursor E2E skill, kept in sync with the global Cursor version. |
 | `workspace/work/scripts/` | Cross-repository helper scripts. |
@@ -22,17 +23,17 @@ directory and copy only the payload paths in [SETUP.md](SETUP.md).
 
 ## Skills
 
-| Skill | Cursor | Codex | What it does |
-| --- | --- | --- | --- |
-| `respan-browser-testing` | yes | yes | Validates frontend behavior in an authenticated browser against staging and keeps matching PR test notes current. |
-| `investigate-review-comments` | yes | yes | Triages GitHub review threads, verifies claims with browser evidence, and prepares replies. |
-| `e2e-testing` | yes | yes | Creates and maintains user-flow Playwright tests in the shared E2E harness. |
-| `audit-frontend-tests` | yes | yes | Audits frontend tests for brittle, redundant, or low-value coverage without modifying them. |
-| `change-logs-update` | yes | yes | Builds shipped and work-in-progress changelog updates for the authenticated engineer. |
-| `commit-and-push` | yes | yes | Stages, commits, and pushes with Conventional Commits. |
-| `create-pr` | yes | yes | Opens a GitHub pull request against upstream `respanai/respan-frontend`. |
-| `convention` | yes | yes | Frontend development conventions. |
-| `chronicle` | no | yes | Codex screen-history skill. Cursor has no equivalent Memories/Chronicle recorder contract, so this stays Codex-only. |
+| Skill | Cursor | Local Codex | Codex Cloud | What it does |
+| --- | --- | --- | --- | --- |
+| `respan-browser-testing` | yes | yes | yes | Validates frontend behavior in a browser against staging and keeps matching PR test notes current. The cloud version uses isolated servers and headless Playwright. |
+| `investigate-review-comments` | yes | yes | yes | Triages GitHub review threads and verifies claims with exact-head browser evidence. |
+| `e2e-testing` | yes | yes | yes | Creates and maintains approved user-flow Playwright tests in the shared E2E harness. |
+| `audit-frontend-tests` | yes | yes | yes | Audits frontend tests for brittle, redundant, or low-value coverage without modifying them. |
+| `change-logs-update` | yes | yes | yes | Builds shipped and work-in-progress changelog updates for the authenticated engineer. |
+| `commit-and-push` | yes | yes | yes | Stages, commits, and pushes with Conventional Commits. |
+| `create-pr` | yes | yes | yes | Opens a GitHub pull request against the resolved canonical upstream repository. |
+| `convention` | yes | yes | yes | Frontend development conventions. |
+| `chronicle` | no | yes | no | Codex screen history requires the local Mac recorder and cannot run in Codex Cloud. |
 
 ## Scripts and tests
 
@@ -49,6 +50,10 @@ Cursor is the shared source for both:
 2. `/Users/rizwan_respan/respan-frontend-codex`
 
 Restore Cursor files into `$HOME/.cursor`. Restore Codex files into `$HOME/.codex` only if you still use Codex. Workspace files go to `/Users/rizwan_respan/work`.
+
+For Codex Cloud, configure the setup and maintenance scripts in
+[`codex-cloud/`](codex-cloud/README.md). Do not copy cloud variants over the
+local profile.
 
 Do not copy these files into tracked Respan repositories unless you explicitly want them committed there.
 

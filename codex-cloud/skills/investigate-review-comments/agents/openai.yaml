@@ -1,0 +1,4 @@
+interface:
+  display_name: "Investigate Review Comments"
+  short_description: "Cloud-verify PR review comments"
+  default_prompt: "Use $investigate-review-comments to verify unresolved PR comments with exact-head code and headless browser evidence in Codex Cloud."
