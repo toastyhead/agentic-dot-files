@@ -11,6 +11,20 @@ agents_source="$dotfiles_directory/codex-cloud/AGENTS.md"
 agents_target="$cloud_home_directory/.codex/AGENTS.md"
 e2e_directory="$dotfiles_directory/workspace/work/e2e"
 
+verify_headless_chromium() {
+  node <<'NODE'
+const { chromium } = require("@playwright/test");
+
+chromium
+  .launch({ headless: true })
+  .then((browser) => browser.close())
+  .catch((error) => {
+    console.error("Headless Chromium launch failed:", error.message);
+    process.exit(1);
+  });
+NODE
+}
+
 if [ -d "$dotfiles_directory/.git" ]; then
   git -C "$dotfiles_directory" pull --ff-only
 elif [ -e "$dotfiles_directory" ]; then
@@ -42,7 +56,8 @@ if [ "${CODEX_CLOUD_SKIP_BROWSER_SETUP:-0}" != "1" ]; then
   (
     cd "$e2e_directory"
     npm ci
-    npx playwright install chromium
+    npx playwright install --with-deps chromium
+    verify_headless_chromium
   )
 fi
 

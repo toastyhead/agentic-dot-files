@@ -15,7 +15,8 @@ setup script and `maintenance.sh` as the maintenance script. The setup script:
 2. links each `codex-cloud/skills` entry under `$HOME/.agents/skills` without
    replacing unrelated user skills;
 3. installs `codex-cloud/AGENTS.md` as the global Codex instructions; and
-4. installs the existing shared Playwright harness and Chromium.
+4. installs the existing shared Playwright harness, Chromium, and its Linux
+   system dependencies, then verifies that headless Chromium launches.
 
 Set `CODEX_CLOUD_SKIP_BROWSER_SETUP=1` only for environments that should not
 perform browser validation. Set `CODEX_CLOUD_DOTFILES_DIR` only when the clone
@@ -55,6 +56,11 @@ cache. Ask Codex:
 
 ```text
 List the global and repository instruction files, available user skills, the
-current checkout root, and whether headless Chromium is installed. Do not
-change files.
+current checkout root, and whether headless Chromium can launch successfully.
+Do not change files.
 ```
+
+If a run finds a downloaded Chromium binary but reports missing shared
+libraries, update both environment scripts from this directory and reset the
+environment cache. A successful setup now includes a real headless launch, not
+only a binary-presence check.

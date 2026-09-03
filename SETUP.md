@@ -68,8 +68,10 @@ into the maintenance script.
 
 The setup clones this repository to `$HOME/agentic-dot-files`, links each remote
 skill into the documented `$HOME/.agents/skills` location, installs the cloud
-`AGENTS.md`, and prepares the existing Playwright harness plus Chromium. The
-maintenance script fast-forwards the cached clone so skill changes apply to
+`AGENTS.md`, and prepares the existing Playwright harness plus Chromium and its
+Linux system dependencies. It also verifies an actual headless browser launch.
+The maintenance script fast-forwards the cached clone, refreshes missing browser
+dependencies, and verifies Chromium again so skill changes apply safely to
 resumed environments.
 
 For authenticated staging validation, configure `E2E_EMAIL` and `E2E_PASSWORD`
