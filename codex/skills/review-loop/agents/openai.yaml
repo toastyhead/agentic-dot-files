@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review loop"
+  short_description: "Resolve Codex and Greptile reviews until both pass"
+  default_prompt: "Use $review-loop on the current PR to request Codex and Greptile reviews, investigate findings, fix and push changes, reply and resolve each addressed comment, and repeat until both reviewers are satisfied."

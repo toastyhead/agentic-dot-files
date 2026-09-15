@@ -27,6 +27,7 @@ directory and copy only the payload paths in [SETUP.md](SETUP.md).
 | --- | --- | --- | --- | --- |
 | `respan-browser-testing` | yes | yes | yes | Validates frontend behavior in a browser against staging and keeps matching PR test notes current. The cloud version uses isolated servers and headless Playwright. |
 | `investigate-review-comments` | yes | yes | yes | Triages GitHub review threads and verifies claims with exact-head browser evidence. |
+| `review-loop` | no | yes | no | Requests Codex and Greptile reviews, investigates and verifies fixes, commits and pushes, replies and resolves threads, and repeats until both reviewers are satisfied with the final commit. |
 | `e2e-testing` | yes | yes | yes | Creates and maintains approved user-flow Playwright tests in the shared E2E harness. |
 | `audit-frontend-tests` | yes | yes | yes | Audits frontend tests for brittle, redundant, or low-value coverage without modifying them. |
 | `change-logs-update` | yes | yes | yes | Builds shipped and work-in-progress changelog updates for the authenticated engineer. |
